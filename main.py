@@ -11,12 +11,11 @@ exchange = ccxt.kraken({
 def obtener_entrada(mensaje):
     return input(colored.stylize(mensaje + ": ", colored.fg("green")))
 
-# Obtener datos históricos del mercado
+
 def obtener_datos_historicos(symbol, timeframe, limit):
     data = exchange.fetch_ohlcv(symbol, timeframe=timeframe, limit=limit)
     return data
 
-# Análisis de tendencias
 def analizar_tendencias(data):
     close_prices = [item[4] for item in data]
     last_price = close_prices[-1]
@@ -61,20 +60,20 @@ def gestionar_riesgo(precio_compra):
             if precio_compra_actual > precio_compra:
                 nuevo_stop_loss = precio_compra_actual * stop_loss_percentage
                 exchange.edit_order(id=order_id, stop_loss=nuevo_stop_loss)
-                print("Stop-loss actualizado para la posición de compra", order_id)
+                print("El stop loss fue actualizado con exito para la posicion compra", order_id)
 
          
             if precio_compra_actual > precio_compra:
                 nuevo_take_profit = precio_compra_actual * take_profit_percentage
                 exchange.edit_order(id=order_id, take_profit=nuevo_take_profit)
-                print("Take-profit actualizado para la posición de compra", order_id)
+                print("El take profit fue actualizado con exito para la posicion compra", order_id)
 
 
-saldo_disponible = float(obtener_entrada("Ingresa el saldo disponible"))
-symbol = obtener_entrada("Ingresa el símbolo de la criptomoneda que deseas operar")
+saldo_disponible = float(obtener_entrada("Cual es tu saldo disponible?"))
+symbol = obtener_entrada("Agrega el simbolo de la cripto a operar")
 timeframe = '1d' 
 limit = 100  
-monto_maximo_compra = float(obtener_entrada("Ingresa el monto máximo de compra"))
+monto_maximo_compra = float(obtener_entrada("Cual es el monto maximo de compra que deseas establecer?"))
 
 data = obtener_datos_historicos(symbol, timeframe, limit)
 tendencia = analizar_tendencias(data)
@@ -107,4 +106,4 @@ if tendencia == 'vender':
     vender(cantidad_venta, precio_venta)
 
 else:
-    print("No se realizó ninguna acción.")
+    print("No se hizo nada.")
